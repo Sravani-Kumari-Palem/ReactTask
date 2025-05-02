@@ -15,7 +15,7 @@ npm start
 ## other pages
 ![image](https://github.com/user-attachments/assets/c93b751b-7e36-4518-8696-cbaaf08dfb6a)
 
-added basic navigation to home, events, orders, marketing pages.
+added basic navigation to home, events, orders, marketing pages. Once user click on logout in main dashboard menu the page will redirect to login.
 
 
 
