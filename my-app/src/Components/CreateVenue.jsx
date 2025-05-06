@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './createVenue.css';
 //import { FaUpload } from 'react-icons/fa';
 
-const CreateVenue = ({ onVenueCreated }) => {
+const CreateVenue = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -19,8 +21,15 @@ const CreateVenue = ({ onVenueCreated }) => {
 
   const handleImageChange = e => {
     if (e.target.files && e.target.files[0]) {
-      setForm(prev => ({ ...prev, image: e.target.files[0] }));
-      setImageName(e.target.files[0].name);
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onloadend = () => {
+        setForm(prev => ({ ...prev, image: reader.result }));
+      };
+      
+      reader.readAsDataURL(file);
+      setImageName(file.name);
     }
   };
 
@@ -34,20 +43,19 @@ const CreateVenue = ({ onVenueCreated }) => {
       description: form.description,
       address: form.address,
       capacity: form.capacity,
+      image: form.image,
       imageName: imageName,
     });
     // Save back to localStorage
     localStorage.setItem('venues', JSON.stringify(venues));
-    // Navigate back to dashboard
-    if (onVenueCreated) onVenueCreated();
-    setForm({ name: '', description: '', address: '', capacity: '', image: null });
-    setImageName('');
+    // Navigate back to venue list
+    navigate('/dashboard/venue');
   };
 
   return (
     <div className="create-venue-container">
       <div className="venue-image-placeholder">
-        <img></img>
+        {form.image && <img src={form.image} alt="Preview" style={{ maxWidth: '100%', maxHeight: '100%' }} />}
       </div>
       <div className="venue-form-section">
         <h2 className="venue-form-title">LIST OUT VENUES</h2>
